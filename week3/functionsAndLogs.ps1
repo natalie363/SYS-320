@@ -25,4 +25,27 @@ for($i=0; $i -lt $loginouts.Count; $i++){
 return $loginoutstable
 }
 
-loginLogs(14)
+
+
+function powerLogs($timeframe){
+# Gets the login/logout events from the past 14 days
+$powerevents = Get-EventLog system -Source EventLog -After (Get-Date).AddDays(-"$timeframe")
+
+#creates an array
+$powereventstable = @()
+for($i=0; $i -lt $powerevents.Count; $i++){
+  # Event property value
+  $event = ""
+  if ($powerevents[$i].EventID -eq 6005) {$event="Startup"}
+  if ($powerevents[$i].EventID -eq 6006) {$event="Shutoff"}
+  if ($powerevents[$i].EventID -ne 6005 -and $powerevents[$i].EventID -ne 6006) {continue}
+
+  # Add lines to empty array
+  $powereventstable += [pscustomobject]@{"Time" = $powerevents[$i].TimeGenerated; `
+                                       "Id" = $powerevents[$i].EventID; `
+                                       "Event" = $event; `
+                                       "User" = "System";
+                                       }
+  }
+return $powereventstable
+}
