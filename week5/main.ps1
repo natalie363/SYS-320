@@ -2,13 +2,17 @@
 
 $FullTable = daysTranslator(gatherClasses)
 
-<#$FullTable | Select "Class Code", Instructor, Location, Days, "Time Start", "Time End" | `
-Where { $_."Instructor" -ilike "Furkan Paligu" }#>
 
-<#$FullTable | Where { ($_.Location -ilike "JOYC 310") -and ($_.days -contains "Monday") } | `
+# Deliverable 1
+$FullTable | Select "Class Code", Instructor, Location, Days, "Time Start", "Time End" | `
+Where { $_."Instructor" -ilike "Furkan Paligu" }
+
+# Deliverable 2
+$FullTable | Where { ($_.Location -ilike "JOYC 310") -and ($_.days -contains "Monday") } | `
     Sort-Object "Time Start" | `
-    Select "Time Start", "Time End", "Class Code"#>
+    Select "Time Start", "Time End", "Class Code"
 
+# Deliverable 3
 $ITSInstructors = $FullTable | Where { ($_."Class Code" -ilike "SYS*") -or `
                                        ($_."Class Code" -ilike "NET*") -or `
                                        ($_."Class Code" -ilike "SEC*") -or `
@@ -18,6 +22,8 @@ $ITSInstructors = $FullTable | Where { ($_."Class Code" -ilike "SYS*") -or `
                              | Select "Instructor" `
                              | Sort-Object "Instructor" -Unique
 
-$FullTable | for { $_.Instructor -in $ITSInstructors.Instructor } `
+# Deliverable 4
+$FullTable | Where-Object { $_.Instructor -in $ITSInstructors.Instructor } `
+           | Group-Object "Instructor" | Select Count, Name | Sort Count -Descending
            
                              
