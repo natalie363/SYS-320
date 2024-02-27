@@ -38,8 +38,6 @@ while($operation){
         # at risk users
         $logDays = Read-Host "Enter the number of days from which to view failed logins"
         atRiskUsers $logDays
-        #$allMissedLogs = getFailedLogins $logDays
-        #Write-Host ($allMissedLogs | Group-Object -Property user | Where-Object {$_.count -ge 10} | format-table -Property count, name | out-string)
     }
     elseif($choice -eq 4){
        #access champlain 
